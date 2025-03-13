@@ -40,9 +40,4 @@ public class CellController : MonoBehaviour
                 break;
         }
     }
-    
-    public void SetExit()
-    {
-        floor.GetComponent<Renderer>().material.color = Color.green;
-    }
 }

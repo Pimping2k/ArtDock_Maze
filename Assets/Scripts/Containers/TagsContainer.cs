@@ -5,5 +5,6 @@
         public static string PLAYER = "Player";
 
         public static string GAMESCENE = "SampleScene";
+        public static string MAINMENU = "MainMenu";
     }
 }

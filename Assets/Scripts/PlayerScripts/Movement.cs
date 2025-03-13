@@ -5,20 +5,22 @@ namespace PlayerScripts
 {
     public class Movement : MonoBehaviour
     {
-        public float walkSpeed = 6f;
-        public float runSpeed = 12f;
-        public float jumpPower = 7f;
-        public float gravity = 10f;
+        [SerializeField] private Animator _animator;
+        
+        [SerializeField] private float walkSpeed = 6f;
+        [SerializeField] private float runSpeed = 12f;
+        [SerializeField] private float jumpPower = 0f;
+        [SerializeField] private float gravity = 10f;
 
-        public float lookSpeed = 2f;
-        public float lookXLimit = 45f;
+        [SerializeField] private float lookSpeed = 2f;
+        [SerializeField] private float lookXLimit = 45f;
+        [SerializeField] private bool canMove = true;
 
         Vector3 moveDirection = Vector3.zero;
         float rotationX = 0;
 
         CharacterController characterController;
 
-        public bool canMove = true;
         bool isRunning;
         bool jumpPressed;
 
@@ -58,6 +60,9 @@ namespace PlayerScripts
             float movementDirectionY = moveDirection.y;
             moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 
+            _animator.SetFloat("VelocityX", moveInput.x);
+            _animator.SetFloat("VelocityY", moveInput.y);
+            
             #endregion
 
             #region HandleJump

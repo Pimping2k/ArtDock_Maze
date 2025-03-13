@@ -562,8 +562,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mazeContainer: {fileID: 2140226640}
   cellPrefab: {fileID: 4048149189364750510, guid: 669812987d647bc448b590f968053b07, type: 3}
-  width: 11
-  height: 15
+  exitPrefab: {fileID: 4048149189364750510, guid: 57ec672be51ad0549b42c25a737eff5d, type: 3}
+  width: 3
+  height: 5
 --- !u!1 &1654070090
 GameObject:
   m_ObjectHideFlags: 0

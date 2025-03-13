@@ -1,31 +1,34 @@
 using System;
 using System.Collections.Generic;
+using MazeScripts;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 
 public class MazeGenerator : MonoBehaviour
 {
-    [Header("References")]
-    [SerializeField] private GameObject mazeContainer;
-    public GameObject cellPrefab;
-    
-    [Header("Properties")]
-    public int width;
+    [Header("References")] [SerializeField]
+    private GameObject mazeContainer;
+
+    [SerializeField] private GameObject cellPrefab;
+    [SerializeField] private GameObject exitPrefab;
+
+    [Header("Properties")] public int width;
     public int height;
-    
+
     private readonly Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
     private CellController[,] grid;
 
     private CellController exitCell;
-    
+
     private static event Action RegenerateMaze;
     public static void InvokeRegenerateMaze() => RegenerateMaze?.Invoke();
-    
+
     private void Awake()
     {
         grid = new CellController[width, height];
-        
+
         RegenerateMaze += GenerateMaze;
     }
 
@@ -45,7 +48,7 @@ public class MazeGenerator : MonoBehaviour
     public void GenerateMaze()
     {
         ClearMaze();
-        
+
         grid = new CellController[width, height];
 
         InstantiateMaze();
@@ -160,7 +163,7 @@ public class MazeGenerator : MonoBehaviour
             neighbour.OpenWallTowards(CellController.Direction.South);
         }
     }
-    
+
     private void SetExit()
     {
         exitCell = grid[width - 1, height - 1];
@@ -168,7 +171,7 @@ public class MazeGenerator : MonoBehaviour
         exitCell.OpenWallTowards(CellController.Direction.West);
         exitCell.OpenWallTowards(CellController.Direction.South);
         exitCell.OpenWallTowards(CellController.Direction.North);
-        exitCell.SetExit();
+        Instantiate(exitPrefab, exitCell.transform.position, Quaternion.identity, mazeContainer.transform);
     }
 
     private void OnDestroy()

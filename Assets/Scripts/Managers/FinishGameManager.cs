@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Containers;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class FinishGameManager : MonoBehaviour
@@ -17,12 +19,6 @@ public class FinishGameManager : MonoBehaviour
     {
         FinishGame += HandleFadeIn;
         _canvasGroup.alpha = 0f;
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Z))
-            InvokeFinishGame();
     }
 
     private void HandleFadeIn()
@@ -54,5 +50,6 @@ public class FinishGameManager : MonoBehaviour
         }
 
         _canvasGroup.alpha = 1f;
+        SceneManager.LoadScene(TagsContainer.MAINMENU);
     }
 }
