@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -6,25 +7,52 @@ using Random = UnityEngine.Random;
 
 public class MazeGenerator : MonoBehaviour
 {
+    [Header("References")]
+    [SerializeField] private GameObject mazeContainer;
+    public GameObject cellPrefab;
+    
+    [Header("Properties")]
     public int width;
     public int height;
-    public GameObject cellPrefab;
-
+    
     private readonly Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
     private CellController[,] grid;
     private int[,] maze;
 
+    private static event Action RegenerateMaze;
+    public static void InvokeRegenerateMaze() => RegenerateMaze?.Invoke();
+    
     private void Awake()
     {
         grid = new CellController[width, height];
+        
+        RegenerateMaze += GenerateMaze;
     }
 
     private void Start()
     {
         GenerateMaze();
+        HandlePlayerSpawn();
+    }
+
+    private void HandlePlayerSpawn()
+    {
+        var startPos = grid[0, 0].transform.localPosition;
+        GameManager.Instance.SpawnPoint.position = new Vector3(startPos.x, 1, startPos.z);
+        GameManager.Instance.InvokeSpawnPlayer();
     }
 
     public void GenerateMaze()
+    {
+        ClearMaze();
+        
+        grid = new CellController[width, height];
+
+        InstantiateMaze();
+        RemoveWallWithBacktracking(grid);
+    }
+
+    private void ClearMaze()
     {
         if (grid != null)
         {
@@ -34,16 +62,11 @@ public class MazeGenerator : MonoBehaviour
                 {
                     if (grid[x, y] != null)
                     {
-                        Destroy(grid[x, y].gameObject);
+                        DestroyImmediate(grid[x, y].gameObject);
                     }
                 }
             }
         }
-
-        grid = new CellController[width, height];
-
-        InstantiateMaze();
-        RemoveWallWithBacktracking(grid);
     }
 
     private void InstantiateMaze()
@@ -54,11 +77,12 @@ public class MazeGenerator : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                var instance = Instantiate(cellPrefab, new Vector3(x, 0, y), Quaternion.identity);
+                var instance = Instantiate(cellPrefab, new Vector3(x * 2, 0, y * 2), Quaternion.identity);
                 cellControllerComponent = instance.GetComponent<CellController>();
                 cellControllerComponent.X = x;
                 cellControllerComponent.Y = y;
                 grid[x, y] = cellControllerComponent;
+                grid[x, y].transform.parent = mazeContainer.transform;
             }
         }
     }
@@ -134,5 +158,10 @@ public class MazeGenerator : MonoBehaviour
             current.OpenWallTowards(CellController.Direction.North);
             neighbour.OpenWallTowards(CellController.Direction.South);
         }
+    }
+
+    private void OnDestroy()
+    {
+        RegenerateMaze -= GenerateMaze;
     }
 }

@@ -7,6 +7,8 @@ namespace PlayerScripts
     {
         public float walkSpeed = 6f;
         public float runSpeed = 12f;
+        public float jumpPower = 7f;
+        public float gravity = 10f;
 
         public float lookSpeed = 2f;
         public float lookXLimit = 45f;
@@ -15,11 +17,19 @@ namespace PlayerScripts
         float rotationX = 0;
 
         CharacterController characterController;
+
         public bool canMove = true;
         bool isRunning;
+        bool jumpPressed;
+
         Vector2 moveInput;
 
         private InputSystem_Actions _inputSystemActions;
+
+        private void Awake()
+        {
+            _inputSystemActions = new InputSystem_Actions();
+        }
 
         private void Start()
         {
@@ -27,12 +37,19 @@ namespace PlayerScripts
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
+            _inputSystemActions.Player.Enable();
+
             _inputSystemActions.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
             _inputSystemActions.Player.Move.canceled += ctx => moveInput = Vector2.zero;
+
+            _inputSystemActions.Player.Jump.performed += ctx => jumpPressed = true;
+            _inputSystemActions.Player.Jump.canceled += ctx => jumpPressed = false;
         }
 
         private void Update()
         {
+            #region HandleMovement
+
             Vector3 forward = transform.TransformDirection(Vector3.forward);
             Vector3 right = transform.TransformDirection(Vector3.right);
 
@@ -40,6 +57,28 @@ namespace PlayerScripts
             float curSpeedY = canMove ? (isRunning ? runSpeed : walkSpeed) * moveInput.x : 0;
             float movementDirectionY = moveDirection.y;
             moveDirection = (forward * curSpeedX) + (right * curSpeedY);
+
+            #endregion
+
+            #region HandleJump
+
+            if (jumpPressed && canMove && characterController.isGrounded)
+            {
+                moveDirection.y = jumpPower;
+            }
+            else
+            {
+                moveDirection.y = movementDirectionY;
+            }
+
+            if (!characterController.isGrounded)
+            {
+                moveDirection.y -= gravity * Time.deltaTime;
+            }
+
+            #endregion
+
+            characterController.Move(moveDirection * Time.deltaTime);
         }
     }
 }
