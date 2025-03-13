@@ -1,16 +1,27 @@
+using System;
+using Containers;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ButtonController : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private Button playBtn;
+    [SerializeField] private Button quitBtn;
+
+    private void Awake()
     {
-        
+        playBtn.onClick.AddListener(OnPlayButton);
+        quitBtn.onClick.AddListener(OnQuitButton);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnPlayButton()
     {
-        
+        SceneManager.LoadScene(TagsContainer.GAMESCENE);
+    }
+
+    private void OnQuitButton()
+    {
+        Application.Quit();
     }
 }

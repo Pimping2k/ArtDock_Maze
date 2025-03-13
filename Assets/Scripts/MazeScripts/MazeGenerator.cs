@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -17,8 +16,9 @@ public class MazeGenerator : MonoBehaviour
     
     private readonly Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
     private CellController[,] grid;
-    private int[,] maze;
 
+    private CellController exitCell;
+    
     private static event Action RegenerateMaze;
     public static void InvokeRegenerateMaze() => RegenerateMaze?.Invoke();
     
@@ -50,6 +50,7 @@ public class MazeGenerator : MonoBehaviour
 
         InstantiateMaze();
         RemoveWallWithBacktracking(grid);
+        SetExit();
     }
 
     private void ClearMaze()
@@ -158,6 +159,16 @@ public class MazeGenerator : MonoBehaviour
             current.OpenWallTowards(CellController.Direction.North);
             neighbour.OpenWallTowards(CellController.Direction.South);
         }
+    }
+    
+    private void SetExit()
+    {
+        exitCell = grid[width - 1, height - 1];
+        exitCell.OpenWallTowards(CellController.Direction.East);
+        exitCell.OpenWallTowards(CellController.Direction.West);
+        exitCell.OpenWallTowards(CellController.Direction.South);
+        exitCell.OpenWallTowards(CellController.Direction.North);
+        exitCell.SetExit();
     }
 
     private void OnDestroy()
