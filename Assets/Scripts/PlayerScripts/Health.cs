@@ -1,15 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace PlayerScripts
 {
     public class Health : MonoBehaviour
     {
-        [SerializeField] private Transform spawnPoint;
-        
+        private Transform spawnPoint;
+
         public void Die()
         {
             //Make screen fade
-            transform.position = spawnPoint.position;
+            transform.position = GameManager.Instance.SpawnPoint.position;
         }
     }
 }

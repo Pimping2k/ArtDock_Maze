@@ -7,9 +7,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private Transform spawnPoint;
-
     private event Action SpawnPlayer;
     public void InvokeSpawnPlayer() => SpawnPlayer?.Invoke();
+
     public Transform SpawnPoint
     {
         get => spawnPoint;

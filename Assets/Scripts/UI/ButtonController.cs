@@ -21,6 +21,7 @@ public class ButtonController : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        Time.timeScale = 1f;
     }
 
     private void OnPlayButton()

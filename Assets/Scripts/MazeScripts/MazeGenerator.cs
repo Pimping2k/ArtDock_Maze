@@ -10,25 +10,26 @@ public class MazeGenerator : MonoBehaviour
 {
     [Header("References")] [SerializeField]
     private GameObject mazeContainer;
-
     [SerializeField] private GameObject cellPrefab;
     [SerializeField] private GameObject exitPrefab;
-
+    [SerializeField] private GameObject resetPosTrap;
+    [SerializeField] private GameObject regenerateMazeTrap;
+    
+    
     [Header("Properties")] public int width;
     public int height;
-
+    [SerializeField, Range(0, 10)] private int trapCount = 3;
+    
     private readonly Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
     private CellController[,] grid;
 
     private CellController exitCell;
-
+    
     private static event Action RegenerateMaze;
     public static void InvokeRegenerateMaze() => RegenerateMaze?.Invoke();
 
     private void Awake()
     {
-        grid = new CellController[width, height];
-
         RegenerateMaze += GenerateMaze;
     }
 
@@ -40,9 +41,8 @@ public class MazeGenerator : MonoBehaviour
 
     private void HandlePlayerSpawn()
     {
-        var startPos = grid[0, 0].transform.localPosition;
-        GameManager.Instance.SpawnPoint.position = new Vector3(startPos.x, 1, startPos.z);
         GameManager.Instance.InvokeSpawnPlayer();
+        UpdatePlayerSpawnPoint();
     }
 
     public void GenerateMaze()
@@ -52,24 +52,23 @@ public class MazeGenerator : MonoBehaviour
         grid = new CellController[width, height];
 
         InstantiateMaze();
+        UpdatePlayerSpawnPoint();
         RemoveWallWithBacktracking(grid);
         SetExit();
+        SpawnTraps();
+    }
+
+    private void UpdatePlayerSpawnPoint()
+    {
+        var startPos = grid[0, 0].transform.localPosition;
+        GameManager.Instance.SpawnPoint.position = new Vector3(startPos.x, 1, startPos.z);
     }
 
     private void ClearMaze()
     {
-        if (grid != null)
+        foreach (Transform child in mazeContainer.transform)
         {
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    if (grid[x, y] != null)
-                    {
-                        DestroyImmediate(grid[x, y].gameObject);
-                    }
-                }
-            }
+            Destroy(child.gameObject);
         }
     }
 
@@ -174,6 +173,18 @@ public class MazeGenerator : MonoBehaviour
         Instantiate(exitPrefab, exitCell.transform.position, Quaternion.identity, mazeContainer.transform);
     }
 
+    private void SpawnTraps()
+    {
+        for (int i = 0; i < trapCount; i++)
+        {
+            int x = Random.Range(0, width);
+            int y = Random.Range(0, height);
+            var cell = grid[x, y];
+            var trapPrefab = Random.value > 0.5f ? resetPosTrap : regenerateMazeTrap;
+            Instantiate(trapPrefab, cell.transform.position, Quaternion.identity, mazeContainer.transform);
+        }
+    }
+    
     private void OnDestroy()
     {
         RegenerateMaze -= GenerateMaze;

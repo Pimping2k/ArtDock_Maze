@@ -8,15 +8,16 @@ namespace Traps
 {
     public class ResetMazeTrap : MonoBehaviour
     {
+        [SerializeField] private bool regenerateMaze;
+
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag(TagsContainer.PLAYER))
             {
-                if (other.TryGetComponent<Health>(out var playerHealth))
-                {
+                if (regenerateMaze)
                     MazeGenerator.InvokeRegenerateMaze();
-                    playerHealth.Die();
-                }
+                
+                other.transform.position = GameManager.Instance.SpawnPoint.position;
             }
         }
     }
