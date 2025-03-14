@@ -1,19 +1,24 @@
 ﻿using System;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace PlayerScripts
 {
     public class PlayerRotation : MonoBehaviour
     {
-        [SerializeField] private Camera playerCamera;
-        [SerializeField] private Transform lowerBody;
+        [Header("References")] [SerializeField]
+        private Camera playerCamera;
+
         [SerializeField] private Transform lowerBodyParent;
+        [SerializeField] private Transform lowerBody;
         [SerializeField] private Transform upperBodyParent;
         [SerializeField] private Transform upperBody;
         [SerializeField] private Transform weaponParent;
+        [SerializeField] private Transform lScapula;
+        [SerializeField] private Transform rScapula;
 
-        [SerializeField] [Tooltip("Handle rotation speed")]
+        [Header("Settings")] [SerializeField] [Tooltip("Handle rotation speed")]
         private float rotationSpeed = 10f;
 
         [SerializeField] [Tooltip("Minimum value of rotation upper body of player")]
@@ -38,13 +43,15 @@ namespace PlayerScripts
 
             upperBody.parent = upperBodyParent;
             lowerBody.parent = lowerBodyParent;
+            lScapula.parent = weaponParent;
+            rScapula.parent = weaponParent;
 
             _inputSystemActions.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
             _inputSystemActions.Player.Move.canceled += ctx => moveInput = Vector2.zero;
             _inputSystemActions.Player.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             HandleLowerBodyRotation();
             HandleUpperBodyRotation();
@@ -71,6 +78,9 @@ namespace PlayerScripts
 
             currentXRotation = Mathf.Clamp(currentXRotation, minAngle, maxAngle);
             upperBodyParent.transform.localRotation = Quaternion.Euler(currentXRotation, 0f, 0f);
+
+            Quaternion targetRotation = Quaternion.Euler(currentXRotation,0f, 0f );
+            weaponParent.localRotation = Quaternion.Slerp(weaponParent.localRotation, targetRotation, Time.deltaTime * rotationSpeed);
         }
     }
 }

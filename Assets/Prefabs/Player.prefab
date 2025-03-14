@@ -66,6 +66,37 @@ Transform:
   - {fileID: 8696276620220588308}
   m_Father: {fileID: 3562090445201383808}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &680669315657345059
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5659439270541598853}
+  m_Layer: 0
+  m_Name: WeaponParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5659439270541598853
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 680669315657345059}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3600959165791372308}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &714811179513692394
 GameObject:
   m_ObjectHideFlags: 0
@@ -1060,11 +1091,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 2682567957915960801}
-  lowerBody: {fileID: 720828232729521303}
   lowerBodyParent: {fileID: 2577030673401761208}
+  lowerBody: {fileID: 720828232729521303}
   upperBodyParent: {fileID: 8015837823708122768}
   upperBody: {fileID: 3979321221923860337}
-  weaponParent: {fileID: 4854021277401998072}
+  weaponParent: {fileID: 5659439270541598853}
+  lScapula: {fileID: 2054764487557298142}
+  rScapula: {fileID: 8509774290999625012}
   rotationSpeed: 10
   minAngle: -45
   maxAngle: 45
@@ -1891,6 +1924,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7410118637586860780}
+  - {fileID: 5659439270541598853}
   - {fileID: 8509774290999625012}
   - {fileID: 2054764487557298142}
   m_Father: {fileID: 3979321221923860337}
