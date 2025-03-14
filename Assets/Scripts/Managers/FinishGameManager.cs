@@ -1,55 +1,18 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Containers;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class FinishGameManager : MonoBehaviour
 {
-    [SerializeField] private CanvasGroup _canvasGroup;
-    [SerializeField] private float duration;
-
-    private Coroutine fadeInRoutine;
     private static event Action FinishGame;
     public static void InvokeFinishGame() => FinishGame?.Invoke();
 
     private void Awake()
     {
-        FinishGame += HandleFadeIn;
-        _canvasGroup.alpha = 0f;
+        FinishGame += HandleFinish;
     }
 
-    private void HandleFadeIn()
+    private void HandleFinish()
     {
-        if (fadeInRoutine == null)
-        {
-            fadeInRoutine = StartCoroutine(FadeIn());
-        }
-        else
-        {
-            StopCoroutine(fadeInRoutine);
-            fadeInRoutine = null;
-        }
-    }
-
-    private void OnDestroy()
-    {
-        FinishGame -= HandleFadeIn;
-    }
-
-    private IEnumerator FadeIn()
-    {
-        float elapsedTime = 0f;
-        while (duration > elapsedTime)
-        {
-            _canvasGroup.alpha = Mathf.Lerp(0f, 1f, elapsedTime / duration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        _canvasGroup.alpha = 1f;
-        SceneManager.LoadScene(TagsContainer.MAINMENU);
+        MazeGenerator.InvokeRegenerateMaze(true);
     }
 }

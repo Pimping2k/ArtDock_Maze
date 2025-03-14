@@ -1,7 +1,4 @@
-﻿using System;
-using Containers;
-using Interfaces;
-using PlayerScripts;
+﻿using Containers;
 using UnityEngine;
 
 namespace Traps
@@ -14,13 +11,10 @@ namespace Traps
         {
             if (other.CompareTag(TagsContainer.PLAYER))
             {
-                if (other.TryGetComponent<Health>(out var playerHealth))
-                {
-                    if (regenerateMaze)
-                        MazeGenerator.InvokeRegenerateMaze();
-                    
-                    playerHealth.Die();
-                }
+                if (regenerateMaze)
+                    MazeGenerator.InvokeRegenerateMaze(true);
+
+                GameManager.Instance.InvokeRespawnPlayer();
             }
         }
     }

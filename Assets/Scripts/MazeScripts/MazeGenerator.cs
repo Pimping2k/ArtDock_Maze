@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using MazeScripts;
-using Unity.VisualScripting;
+using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -25,8 +24,8 @@ public class MazeGenerator : MonoBehaviour
 
     private CellController exitCell;
     
-    private static event Action RegenerateMaze;
-    public static void InvokeRegenerateMaze() => RegenerateMaze?.Invoke();
+    private static event Action<bool> RegenerateMaze;
+    public static void InvokeRegenerateMaze(bool newMaze) => RegenerateMaze?.Invoke(newMaze);
 
     private void Awake()
     {
@@ -35,7 +34,7 @@ public class MazeGenerator : MonoBehaviour
 
     private void Start()
     {
-        GenerateMaze();
+        GenerateMaze(false);
         HandlePlayerSpawn();
     }
 
@@ -45,10 +44,16 @@ public class MazeGenerator : MonoBehaviour
         UpdatePlayerSpawnPoint();
     }
 
-    public void GenerateMaze()
+    public void GenerateMaze(bool newMaze)
     {
         ClearMaze();
 
+        if (newMaze)
+        {
+            width = Random.Range(width + 2, width + 7);
+            height = Random.Range(width + 2, width + 7);
+        }
+        
         grid = new CellController[width, height];
 
         InstantiateMaze();
@@ -61,7 +66,7 @@ public class MazeGenerator : MonoBehaviour
     private void UpdatePlayerSpawnPoint()
     {
         var startPos = grid[0, 0].transform.localPosition;
-        GameManager.Instance.SpawnPoint.position = new Vector3(startPos.x, 1, startPos.z);
+        GameManager.Instance.SpawnPoint.SetPositionAndRotation(new Vector3(startPos.x, 1, startPos.z),quaternion.identity);
     }
 
     private void ClearMaze()

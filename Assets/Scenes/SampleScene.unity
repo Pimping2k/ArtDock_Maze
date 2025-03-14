@@ -496,7 +496,7 @@ MonoBehaviour:
   regenerateMazeTrap: {fileID: 4048149189364750510, guid: d48c1254c0591e745b0bc027614d9657, type: 3}
   width: 3
   height: 5
-  trapCount: 3
+  trapCount: 0
 --- !u!1 &2140226640
 GameObject:
   m_ObjectHideFlags: 0
@@ -1130,6 +1130,7 @@ GameObject:
   - component: {fileID: 2888681504100850883}
   - component: {fileID: 2644255721013710171}
   - component: {fileID: 5025612232873547439}
+  - component: {fileID: 5025612232873547440}
   m_Layer: 5
   m_Name: ----GameUI
   m_TagString: Untagged
@@ -1150,6 +1151,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseUI: {fileID: 5874688228620175159}
+--- !u!114 &5025612232873547440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5025612232873547437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 928ad90bdc9930345a50c8c927d9ff7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5158302327624254723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1597,20 +1610,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2357540280573443309}
   m_CullTransparentMesh: 1
---- !u!114 &7707922764692862651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8390229093005436086}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 928ad90bdc9930345a50c8c927d9ff7d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _canvasGroup: {fileID: 3011047024214093757}
-  duration: 4
 --- !u!224 &7982271166470894012
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1671,14 +1670,13 @@ GameObject:
   - component: {fileID: 9048379318130760743}
   - component: {fileID: 3882543929743272491}
   - component: {fileID: 3011047024214093757}
-  - component: {fileID: 7707922764692862651}
   m_Layer: 5
   m_Name: FinishGameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8491244490702754130
 RectTransform:
   m_ObjectHideFlags: 0

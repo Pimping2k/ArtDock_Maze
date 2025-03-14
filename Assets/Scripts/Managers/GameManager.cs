@@ -8,8 +8,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private Transform spawnPoint;
     private event Action SpawnPlayer;
+    private event Action RespawnPlayer;
     public void InvokeSpawnPlayer() => SpawnPlayer?.Invoke();
-
+    public void InvokeRespawnPlayer() => RespawnPlayer?.Invoke();
+    
+    private GameObject playerInstance;
     public Transform SpawnPoint
     {
         get => spawnPoint;
@@ -32,15 +35,24 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         SpawnPlayer += OnPlayerSpawn;
+        RespawnPlayer += OnPlayerRespawn;
     }
 
     private void OnPlayerSpawn()
     {
-        Instantiate(playerPrefab, spawnPoint.position, Quaternion.identity);
+        playerInstance = Instantiate(playerPrefab, spawnPoint.position, Quaternion.identity);
+        Debug.Log(playerInstance, this);
+        Debug.Log("Player spawned");
     }
 
     private void OnDestroy()
     {
         SpawnPlayer -= OnPlayerSpawn;
     }
+
+    private void OnPlayerRespawn()
+    {
+        playerInstance.transform.position = spawnPoint.position;
+        Debug.Log("Respawn player");
+    } 
 }

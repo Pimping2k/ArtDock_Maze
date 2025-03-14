@@ -9,81 +9,72 @@ namespace PlayerScripts
         
         [SerializeField] private float walkSpeed = 6f;
         [SerializeField] private float runSpeed = 12f;
-        [SerializeField] private float jumpPower = 0f;
+        [SerializeField] private float jumpPower = 5f;
         [SerializeField] private float gravity = 10f;
+        [SerializeField] private float groundCheckDistance = 0.2f;
 
-        [SerializeField] private float lookSpeed = 2f;
-        [SerializeField] private float lookXLimit = 45f;
         [SerializeField] private bool canMove = true;
+        
+        private Vector3 moveDirection;
+        private Vector2 moveInput;
+        private bool isRunning;
+        private bool jumpPressed;
+        private bool isGrounded;
 
-        Vector3 moveDirection = Vector3.zero;
-        float rotationX = 0;
-
-        CharacterController characterController;
-
-        bool isRunning;
-        bool jumpPressed;
-
-        Vector2 moveInput;
-
+        private Rigidbody rb;
         private InputSystem_Actions _inputSystemActions;
 
         private void Awake()
         {
             _inputSystemActions = new InputSystem_Actions();
+            rb = GetComponent<Rigidbody>();
+            rb.freezeRotation = true; // Отключаем физический поворот, чтобы не падал
         }
 
         private void Start()
         {
-            characterController = GetComponent<CharacterController>();
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
             _inputSystemActions.Player.Enable();
-
             _inputSystemActions.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
             _inputSystemActions.Player.Move.canceled += ctx => moveInput = Vector2.zero;
-
             _inputSystemActions.Player.Jump.performed += ctx => jumpPressed = true;
-            _inputSystemActions.Player.Jump.canceled += ctx => jumpPressed = false;
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
-            #region HandleMovement
+            HandleMovement();
+            HandleJump();
+        }
 
-            Vector3 forward = transform.TransformDirection(Vector3.forward);
-            Vector3 right = transform.TransformDirection(Vector3.right);
+        private void HandleMovement()
+        {
+            if (!canMove) return;
 
-            float curSpeedX = canMove ? (isRunning ? runSpeed : walkSpeed) * moveInput.y : 0;
-            float curSpeedY = canMove ? (isRunning ? runSpeed : walkSpeed) * moveInput.x : 0;
-            float movementDirectionY = moveDirection.y;
-            moveDirection = (forward * curSpeedX) + (right * curSpeedY);
+            Vector3 forward = transform.forward;
+            Vector3 right = transform.right;
+
+            float curSpeedX = (isRunning ? runSpeed : walkSpeed) * moveInput.y;
+            float curSpeedY = (isRunning ? runSpeed : walkSpeed) * moveInput.x;
+
+            Vector3 moveVelocity = (forward * curSpeedX) + (right * curSpeedY);
+            rb.linearVelocity = new Vector3(moveVelocity.x, rb.linearVelocity.y, moveVelocity.z);
 
             _animator.SetFloat("VelocityX", moveInput.x);
             _animator.SetFloat("VelocityY", moveInput.y);
+        }
+
+        private void HandleJump()
+        {
+            isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance);
             
-            #endregion
-
-            #region HandleJump
-
-            if (jumpPressed && canMove && characterController.isGrounded)
+            if (jumpPressed && isGrounded)
             {
-                moveDirection.y = jumpPower;
-            }
-            else
-            {
-                moveDirection.y = movementDirectionY;
+                rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpPower, rb.linearVelocity.z);
             }
 
-            if (!characterController.isGrounded)
-            {
-                moveDirection.y -= gravity * Time.deltaTime;
-            }
-
-            #endregion
-
-            characterController.Move(moveDirection * Time.deltaTime);
+            jumpPressed = false; // Сбрасываем флаг после прыжка
         }
     }
 }

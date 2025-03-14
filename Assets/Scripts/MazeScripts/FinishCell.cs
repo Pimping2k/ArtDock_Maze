@@ -1,5 +1,4 @@
-﻿using System;
-using Containers;
+﻿using Containers;
 using UnityEngine;
 
 namespace MazeScripts
