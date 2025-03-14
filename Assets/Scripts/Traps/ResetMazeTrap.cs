@@ -14,10 +14,13 @@ namespace Traps
         {
             if (other.CompareTag(TagsContainer.PLAYER))
             {
-                if (regenerateMaze)
-                    MazeGenerator.InvokeRegenerateMaze();
-                
-                other.transform.position = GameManager.Instance.SpawnPoint.position;
+                if (other.TryGetComponent<Health>(out var playerHealth))
+                {
+                    if (regenerateMaze)
+                        MazeGenerator.InvokeRegenerateMaze();
+                    
+                    playerHealth.Die();
+                }
             }
         }
     }
