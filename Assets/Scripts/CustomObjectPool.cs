@@ -44,4 +44,12 @@ public class CustomObjectPool : MonoBehaviour
     {
         go.SetActive(false);
     }
+
+    public void ReturnEverythingToPool()
+    {
+        foreach (var poolObject in pool)
+        {
+            ReturnToPool(poolObject);
+        }
+    }
 }

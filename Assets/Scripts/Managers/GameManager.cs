@@ -15,6 +15,13 @@ public class GameManager : MonoBehaviour
     public void InvokeRespawnPlayer() => RespawnPlayer?.Invoke();
 
     private GameObject playerInstance;
+
+    public GameObject PlayerInstance
+    {
+        get => playerInstance;
+        set => playerInstance = value;
+    }
+
     private GameObject enemyPoolInstance;
 
     public GameObject EnemyPoolInstance

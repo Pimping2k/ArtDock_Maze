@@ -12,12 +12,16 @@ public class PauseButtonController : MonoBehaviour
     [SerializeField] private Button continueBtn;
     [SerializeField] private Button quitBtn;
     [SerializeField] private Button mainMenuBtn;
+    [SerializeField] private Button muteMusicBtn;
+
+    private bool isMuted = true;
     
     private void Awake()
     {
         continueBtn.onClick.AddListener(OnContinue);
         quitBtn.onClick.AddListener(OnQuit);
         mainMenuBtn.onClick.AddListener(OnMainMenu);
+        muteMusicBtn.onClick.AddListener(OnMuteMusicButton);
     }
 
     private void OnContinue()
@@ -33,5 +37,19 @@ public class PauseButtonController : MonoBehaviour
     private void OnMainMenu()
     {
         SceneManager.LoadScene(TagsContainer.MAINMENU);
+    }
+    
+    private void OnMuteMusicButton()
+    {
+        isMuted = !isMuted;
+
+        if (isMuted)
+        {
+            MusicManager.Instance.UnMuteMusic();
+        }
+        else
+        {
+            MusicManager.Instance.MuteMusic();
+        }
     }
 }

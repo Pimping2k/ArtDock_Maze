@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3102665616201615311}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -295,6 +295,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 38ec3b340a032704c9dbac1eada86ef3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6631319961572073464}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 38ec3b340a032704c9dbac1eada86ef3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1954424473905960824}
     - targetCorrespondingSourceObject: {fileID: -6880850867950061303, guid: 38ec3b340a032704c9dbac1eada86ef3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8868951673685185359}
@@ -945,6 +948,19 @@ CapsuleCollider:
   m_Height: 0.03
   m_Direction: 1
   m_Center: {x: 0, y: 0.015, z: 0}
+--- !u!114 &1954424473905960824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4829420074777428804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d67e07fb67e422e8825aa1c70ebfd67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDead: 0
 --- !u!4 &5210202239117793790 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 38ec3b340a032704c9dbac1eada86ef3, type: 3}

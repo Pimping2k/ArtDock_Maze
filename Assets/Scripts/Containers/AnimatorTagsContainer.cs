@@ -4,5 +4,6 @@
     {
         public static string VELOCITYX = "VelocityX";
         public static string VELOCITYY = "VelocityY";
+        public static string FINISHING = "Finishing";
     }
 }

@@ -50,11 +50,12 @@ public class MazeGenerator : MonoBehaviour
     public void GenerateMaze(bool newMaze)
     {
         ClearMaze();
-
+        enemyPool.ReturnEverythingToPool(); 
+        
         if (newMaze)
         {
-            width = Random.Range(width + 2, width + 7);
-            height = Random.Range(width + 2, width + 7);
+            width = Random.Range(width + 2, width + 3);
+            height = Random.Range(width + 2, width + 3);
         }
 
         grid = new CellController[width, height];
@@ -81,7 +82,7 @@ public class MazeGenerator : MonoBehaviour
             Destroy(child.gameObject);
         }
     }
-
+    
     private void InstantiateMaze()
     {
         CellController cellControllerComponent;
@@ -186,37 +187,54 @@ public class MazeGenerator : MonoBehaviour
     private void SpawnTraps()
     {
         HashSet<Vector2Int> occupiedCells = new HashSet<Vector2Int>();
+        int totalRegenerateTraps = 0;
+        int totalRespawnTraps = 0;
 
         for (int i = 0; i < trapCount; i++)
         {
             Vector2Int pos;
             do
             {
-                int x = Random.Range(2, width - 1);
-                int y = Random.Range(2, height - 1);
+                int x = Random.Range(1, width - 1);
+                int y = Random.Range(1, height - 1);
                 pos = new Vector2Int(x, y);
             } while (occupiedCells.Contains(pos));
 
             occupiedCells.Add(pos);
-
             var cell = grid[pos.x, pos.y];
-            var trapPrefab = Random.value > 0.5f ? resetPosTrap : regenerateMazeTrap;
-            Instantiate(trapPrefab, cell.transform.position, Quaternion.identity, mazeContainer.transform);
+
+            if (totalRespawnTraps < trapCount / 2)
+            {
+                Instantiate(resetPosTrap, cell.transform.position, Quaternion.identity, mazeContainer.transform);
+                totalRespawnTraps++;
+            }
+            else
+            {
+                Instantiate(regenerateMazeTrap, cell.transform.position, Quaternion.identity, mazeContainer.transform);
+                totalRegenerateTraps++;
+            }
         }
     }
 
     private void SpawnEnemies()
     {
+        HashSet<Vector3> usedPositions = new HashSet<Vector3>();
+
         for (int i = 0; i < enemyCount; i++)
         {
-            int x = Random.Range(2, width);
-            int y = Random.Range(2, height);
+            GameObject enemy;
+            Vector3 spawnPos;
+            do
+            {
+                int x = Random.Range(1, width - 1);
+                int y = Random.Range(1, height - 1);
+                var cell = grid[x, y];
+                spawnPos = new Vector3(cell.transform.position.x, 1f, cell.transform.position.z);
+            } while (usedPositions.Contains(spawnPos));
 
-            var cell = grid[x, y];
-            var cellPos = cell.transform.position;
-
-            var enemy = enemyPool.GetFromPool();
-            enemy.transform.position = new Vector3(cellPos.x, 1f, cellPos.y);
+            enemy = enemyPool.GetFromPool();
+            enemy.transform.position = spawnPos;
+            usedPositions.Add(spawnPos);
         }
     }
 
