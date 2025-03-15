@@ -1,15 +1,18 @@
 using System;
 using Containers;
+using Managers;
+using PlayerScripts;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PauseButtonController : MonoBehaviour
 {
+    [SerializeField] private PauseController pauseController;
     [SerializeField] private Button continueBtn;
     [SerializeField] private Button quitBtn;
     [SerializeField] private Button mainMenuBtn;
-
+    
     private void Awake()
     {
         continueBtn.onClick.AddListener(OnContinue);
@@ -19,10 +22,7 @@ public class PauseButtonController : MonoBehaviour
 
     private void OnContinue()
     {
-        Time.timeScale = 1f;
-        gameObject.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        pauseController.ForceUnpause();
     }
 
     private void OnQuit()

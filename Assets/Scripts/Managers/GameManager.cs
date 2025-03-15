@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour
     private void OnDestroy()
     {
         SpawnPlayer -= OnPlayerSpawn;
+        RespawnPlayer -= OnPlayerRespawn;
     }
 
     private void OnPlayerRespawn()

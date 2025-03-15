@@ -1,18 +1,23 @@
-﻿using UnityEngine;
+﻿using System;
+using Containers;
+using Managers;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace PlayerScripts
 {
     public class Movement : MonoBehaviour
     {
         [SerializeField] private Animator _animator;
-        
-        [SerializeField,Range(1,100)] private float walkSpeed;
-        [SerializeField,Range(1,100)] private float runSpeed;
-        [SerializeField,Range(1,20)] private float jumpPower;
+
+        [SerializeField, Range(1, 100)] private float walkSpeed;
+        [SerializeField, Range(1, 100)] private float runSpeed;
+        [SerializeField, Range(1, 20)] private float jumpPower;
         [SerializeField] private float groundCheckDistance = 0.2f;
 
         [SerializeField] private bool canMove = true;
-        
+
         private Vector3 moveDirection;
         private Vector2 moveInput;
         private bool isRunning;
@@ -20,13 +25,11 @@ namespace PlayerScripts
         private bool isGrounded;
 
         private Rigidbody rb;
-        private InputSystem_Actions _inputSystemActions;
 
         private void Awake()
         {
-            _inputSystemActions = new InputSystem_Actions();
             rb = GetComponent<Rigidbody>();
-            rb.freezeRotation = true; // Отключаем физический поворот, чтобы не падал
+            rb.freezeRotation = true;
         }
 
         private void Start()
@@ -34,20 +37,17 @@ namespace PlayerScripts
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
-            var startWalkSpeed = walkSpeed;
-            
-            _inputSystemActions.Player.Enable();
-            _inputSystemActions.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
-            _inputSystemActions.Player.Move.canceled += ctx => moveInput = Vector2.zero;
-            _inputSystemActions.Player.Jump.performed += ctx => jumpPressed = true;
-            _inputSystemActions.Player.Sprint.performed += ctx => walkSpeed = runSpeed;
-            _inputSystemActions.Player.Sprint.canceled += ctx => walkSpeed = startWalkSpeed;
+            InputManager.Instance.InputActions.Player.Move.performed += OnMovePerformed;
+            InputManager.Instance.InputActions.Player.Move.canceled += OnMoveCanceled;
         }
+
+        private void OnMovePerformed(InputAction.CallbackContext obj) => moveInput = obj.ReadValue<Vector2>();
+        private void OnMoveCanceled(InputAction.CallbackContext obj) => moveInput = Vector2.zero;
+
 
         private void FixedUpdate()
         {
             HandleMovement();
-            HandleJump();
         }
 
         private void HandleMovement()
@@ -63,20 +63,14 @@ namespace PlayerScripts
             Vector3 moveVelocity = (forward * curSpeedX) + (right * curSpeedY);
             rb.linearVelocity = new Vector3(moveVelocity.x, rb.linearVelocity.y, moveVelocity.z);
 
-            _animator.SetFloat("VelocityX", moveInput.x);
-            _animator.SetFloat("VelocityY", moveInput.y);
+            _animator.SetFloat(AnimatorTagsContainer.VELOCITYX, moveInput.x);
+            _animator.SetFloat(AnimatorTagsContainer.VELOCITYY, moveInput.y);
         }
 
-        private void HandleJump()
+        private void OnDestroy()
         {
-            isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance);
-            
-            if (jumpPressed && isGrounded)
-            {
-                rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpPower, rb.linearVelocity.z);
-            }
-
-            jumpPressed = false;
+            InputManager.Instance.InputActions.Player.Move.performed -= OnMovePerformed;
+            InputManager.Instance.InputActions.Player.Move.canceled -= OnMoveCanceled;
         }
     }
 }

@@ -494,9 +494,11 @@ MonoBehaviour:
   exitPrefab: {fileID: 4048149189364750510, guid: 57ec672be51ad0549b42c25a737eff5d, type: 3}
   resetPosTrap: {fileID: 4048149189364750510, guid: f27fdb47325de2a4bb092afbe96339fc, type: 3}
   regenerateMazeTrap: {fileID: 4048149189364750510, guid: d48c1254c0591e745b0bc027614d9657, type: 3}
+  enemyPool: {fileID: 1688410690}
   width: 11
   height: 13
   trapCount: 3
+  enemyCount: 3
 --- !u!1 &1688410688
 GameObject:
   m_ObjectHideFlags: 0
@@ -543,6 +545,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolPrefab: {fileID: 6695923167237944560, guid: b0cc3da7115085246b4a59f865b49915, type: 3}
   initialSize: 10
+--- !u!1 &2037179697
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2037179699}
+  - component: {fileID: 2037179698}
+  m_Layer: 0
+  m_Name: InputManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2037179698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2037179697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b90bacd64f4420aa6ea52827d8683a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &2037179699
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2037179697}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2140226640
 GameObject:
   m_ObjectHideFlags: 0
@@ -1413,6 +1459,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc7f1bb618b8f304084be3e7848f6f12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pauseController: {fileID: 5025612232873547439}
   continueBtn: {fileID: 5375265333072479089}
   quitBtn: {fileID: 7184561457422687674}
   mainMenuBtn: {fileID: 7302952736825831751}
@@ -1843,3 +1890,4 @@ SceneRoots:
   - {fileID: 337338622}
   - {fileID: 246830149}
   - {fileID: 1688410689}
+  - {fileID: 2037179699}

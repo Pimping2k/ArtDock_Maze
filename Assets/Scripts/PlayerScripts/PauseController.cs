@@ -1,5 +1,7 @@
 ﻿using System;
+using Managers;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace PlayerScripts
 {
@@ -10,28 +12,45 @@ namespace PlayerScripts
         private InputSystem_Actions _inputSystemActions;
 
         private bool isPaused;
-        
+
         private void Start()
         {
             pauseUI.SetActive(false);
-            _inputSystemActions = new InputSystem_Actions();
-            _inputSystemActions.Enable();
-            _inputSystemActions.Player.Pause.performed += ctx => Pause();
+            InputManager.Instance.InputActions.PlayerUI.Pause.performed += OnPausePerformed;
         }
+
+        private void OnPausePerformed(InputAction.CallbackContext obj) => Pause();
 
         private void Pause()
         {
+            var playerInput = InputManager.Instance.InputActions.Player;
             isPaused = !isPaused;
-            
+
             pauseUI.SetActive(isPaused);
-            Time.timeScale = isPaused ? 0f : 1f;
-            Cursor.lockState = isPaused? CursorLockMode.None : CursorLockMode.Locked ;
+
+            if (isPaused)
+                playerInput.Disable();
+            else
+                playerInput.Enable();
+            
+            Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
             Cursor.visible = isPaused;
         }
 
+        public void ForceUnpause()
+        {
+            isPaused = false;
+            pauseUI.SetActive(false);
+    
+            InputManager.Instance.InputActions.Player.Enable();
+    
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        
         private void OnDestroy()
         {
-            _inputSystemActions.Disable();
+            InputManager.Instance.InputActions.PlayerUI.Pause.performed -= OnPausePerformed;
         }
     }
 }

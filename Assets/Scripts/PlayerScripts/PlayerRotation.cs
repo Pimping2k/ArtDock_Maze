@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using Managers;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace PlayerScripts
 {
@@ -9,12 +12,13 @@ namespace PlayerScripts
 
         [SerializeField] [Tooltip("Value of rotation upper body of player in pan")]
         private float rotationXAngle;
-        
+
         [SerializeField] [Tooltip("Value of rotation upper body of player in tilt")]
         private float rotationZAngle;
-        
-        [Header("References")] 
-        [SerializeField] private Camera playerCamera;
+
+        [Header("References")] [SerializeField]
+        private Camera playerCamera;
+
         [SerializeField] private Transform lowerBodyParent;
         [SerializeField] private Transform lowerBody;
         [SerializeField] private Transform upperBodyParent;
@@ -22,31 +26,29 @@ namespace PlayerScripts
         [SerializeField] private Transform weaponParent;
         [SerializeField] private Transform lScapula;
         [SerializeField] private Transform rScapula;
-        
+
         private Vector2 moveInput;
-        private InputSystem_Actions _inputSystemActions;
         private Vector2 lookInput;
         private float currentXRotation;
         private float currentZRotation;
 
-        private void Awake()
-        {
-            _inputSystemActions = new InputSystem_Actions();
-        }
-
         private void Start()
         {
-            _inputSystemActions.Player.Enable();
-
             upperBody.parent = upperBodyParent;
             lowerBody.parent = lowerBodyParent;
             lScapula.parent = weaponParent;
             rScapula.parent = weaponParent;
 
-            _inputSystemActions.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
-            _inputSystemActions.Player.Move.canceled += ctx => moveInput = Vector2.zero;
-            _inputSystemActions.Player.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
+            InputManager.Instance.InputActions.Player.Move.performed += OnMovePerformed;
+            InputManager.Instance.InputActions.Player.Move.canceled += OnMoveCanceled;
+            InputManager.Instance.InputActions.Player.Look.performed += OnLookPerformed;
+            InputManager.Instance.InputActions.Player.Look.canceled += OnLookCanceled;
         }
+        private void OnMovePerformed(InputAction.CallbackContext obj) => moveInput = obj.ReadValue<Vector2>();
+        private void OnMoveCanceled(InputAction.CallbackContext obj) => moveInput = Vector2.zero;
+        private void OnLookPerformed(InputAction.CallbackContext obj) => lookInput = obj.ReadValue<Vector2>();
+        private void OnLookCanceled(InputAction.CallbackContext obj) => lookInput = Vector2.zero;
+
 
         private void FixedUpdate()
         {
@@ -74,10 +76,10 @@ namespace PlayerScripts
             mouseDelta *= rotationSpeed * Time.deltaTime;
             currentXRotation -= mouseDelta.x;
             currentZRotation -= mouseDelta.y;
-            
+
             currentXRotation = Mathf.Clamp(currentXRotation, -rotationXAngle, rotationXAngle);
             currentZRotation = Mathf.Clamp(currentZRotation, -rotationZAngle, rotationZAngle);
-            
+
             upperBodyParent.transform.localRotation = Quaternion.Euler(currentXRotation, 0f, currentZRotation);
         }
 
@@ -86,6 +88,14 @@ namespace PlayerScripts
             Quaternion targetRotation = Quaternion.Euler(currentXRotation, 0f, 0f);
             weaponParent.localRotation = Quaternion.Slerp(weaponParent.localRotation, targetRotation,
                 Time.deltaTime * rotationSpeed);
+        }
+
+        private void OnDestroy()
+        {
+            InputManager.Instance.InputActions.Player.Move.performed += OnMovePerformed;
+            InputManager.Instance.InputActions.Player.Move.canceled += OnMoveCanceled;
+            InputManager.Instance.InputActions.Player.Look.performed += OnLookPerformed;
+            InputManager.Instance.InputActions.Player.Look.canceled += OnLookCanceled;
         }
     }
 }

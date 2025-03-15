@@ -14,13 +14,14 @@ public class MazeGenerator : MonoBehaviour
     [SerializeField] private GameObject exitPrefab;
     [SerializeField] private GameObject resetPosTrap;
     [SerializeField] private GameObject regenerateMazeTrap;
+    [SerializeField] private CustomObjectPool enemyPool;
 
+    [Header("Settings")] [SerializeField, Range(1, 100)]
+    private int width;
 
-    [Header("Settings")] 
-    [SerializeField, Range(1, 100)] private int width;
     [SerializeField, Range(1, 100)] private int height;
-    [SerializeField, Range(0, 10)] private int trapCount = 3;
-
+    [SerializeField, Range(0, 10)] private int trapCount;
+    [SerializeField, Range(0, 10)] private int enemyCount;
     private CellController[,] grid;
     private CellController exitCell;
     private static event Action<bool> RegenerateMaze;
@@ -60,6 +61,7 @@ public class MazeGenerator : MonoBehaviour
         RemoveWallWithBacktracking(grid);
         SetExit();
         SpawnTraps();
+        SpawnEnemies();
     }
 
     private void UpdatePlayerSpawnPoint()
@@ -182,11 +184,26 @@ public class MazeGenerator : MonoBehaviour
     {
         for (int i = 0; i < trapCount; i++)
         {
-            int x = Random.Range(4, width);
-            int y = Random.Range(0, height);
+            int x = Random.Range(3, width);
+            int y = Random.Range(3, height);
             var cell = grid[x, y];
             var trapPrefab = Random.value > 0.5f ? resetPosTrap : regenerateMazeTrap;
             Instantiate(trapPrefab, cell.transform.position, Quaternion.identity, mazeContainer.transform);
+        }
+    }
+
+    private void SpawnEnemies()
+    {
+        for (int i = 0; i < enemyCount; i++)
+        {
+            int x = Random.Range(3, width);
+            int y = Random.Range(3, height);
+            
+            var cell = grid[x, y];
+            var cellPos = cell.transform.position;
+            
+            var enemy = enemyPool.GetFromPool();
+            enemy.transform.position = new Vector3(cellPos.x, 2f, cellPos.y);
         }
     }
 
