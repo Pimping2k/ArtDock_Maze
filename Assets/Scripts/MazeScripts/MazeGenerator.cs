@@ -14,7 +14,6 @@ public class MazeGenerator : MonoBehaviour
     [SerializeField] private GameObject exitPrefab;
     [SerializeField] private GameObject resetPosTrap;
     [SerializeField] private GameObject regenerateMazeTrap;
-    [SerializeField] private CustomObjectPool enemyPool;
 
     [Header("Settings")] [SerializeField, Range(1, 100)]
     private int width;
@@ -22,8 +21,11 @@ public class MazeGenerator : MonoBehaviour
     [SerializeField, Range(1, 100)] private int height;
     [SerializeField, Range(0, 10)] private int trapCount;
     [SerializeField, Range(0, 10)] private int enemyCount;
+
     private CellController[,] grid;
     private CellController exitCell;
+    private CustomObjectPool enemyPool;
+
     private static event Action<bool> RegenerateMaze;
     public static void InvokeRegenerateMaze(bool newMaze) => RegenerateMaze?.Invoke(newMaze);
 
@@ -34,6 +36,7 @@ public class MazeGenerator : MonoBehaviour
 
     private void Start()
     {
+        enemyPool = GameManager.Instance.EnemyPoolInstance.GetComponent<CustomObjectPool>();
         GenerateMaze(false);
         HandlePlayerSpawn();
     }
@@ -182,11 +185,21 @@ public class MazeGenerator : MonoBehaviour
 
     private void SpawnTraps()
     {
+        HashSet<Vector2Int> occupiedCells = new HashSet<Vector2Int>();
+
         for (int i = 0; i < trapCount; i++)
         {
-            int x = Random.Range(3, width);
-            int y = Random.Range(3, height);
-            var cell = grid[x, y];
+            Vector2Int pos;
+            do
+            {
+                int x = Random.Range(2, width - 1);
+                int y = Random.Range(2, height - 1);
+                pos = new Vector2Int(x, y);
+            } while (occupiedCells.Contains(pos));
+
+            occupiedCells.Add(pos);
+
+            var cell = grid[pos.x, pos.y];
             var trapPrefab = Random.value > 0.5f ? resetPosTrap : regenerateMazeTrap;
             Instantiate(trapPrefab, cell.transform.position, Quaternion.identity, mazeContainer.transform);
         }
@@ -196,14 +209,14 @@ public class MazeGenerator : MonoBehaviour
     {
         for (int i = 0; i < enemyCount; i++)
         {
-            int x = Random.Range(3, width);
-            int y = Random.Range(3, height);
-            
+            int x = Random.Range(2, width);
+            int y = Random.Range(2, height);
+
             var cell = grid[x, y];
             var cellPos = cell.transform.position;
-            
+
             var enemy = enemyPool.GetFromPool();
-            enemy.transform.position = new Vector3(cellPos.x, 2f, cellPos.y);
+            enemy.transform.position = new Vector3(cellPos.x, 1f, cellPos.y);
         }
     }
 

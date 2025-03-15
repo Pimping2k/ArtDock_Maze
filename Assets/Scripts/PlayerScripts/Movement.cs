@@ -1,7 +1,5 @@
-﻿using System;
-using Containers;
+﻿using Containers;
 using Managers;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,9 +10,7 @@ namespace PlayerScripts
         [SerializeField] private Animator _animator;
 
         [SerializeField, Range(1, 100)] private float walkSpeed;
-        [SerializeField, Range(1, 100)] private float runSpeed;
         [SerializeField, Range(1, 20)] private float jumpPower;
-        [SerializeField] private float groundCheckDistance = 0.2f;
 
         [SerializeField] private bool canMove = true;
 
@@ -57,14 +53,14 @@ namespace PlayerScripts
             Vector3 forward = transform.forward;
             Vector3 right = transform.right;
 
-            float curSpeedX = (isRunning ? runSpeed : walkSpeed) * moveInput.y;
-            float curSpeedY = (isRunning ? runSpeed : walkSpeed) * moveInput.x;
+            float curSpeedX =walkSpeed * moveInput.y;
+            float curSpeedY =walkSpeed * moveInput.x;
 
             Vector3 moveVelocity = (forward * curSpeedX) + (right * curSpeedY);
             rb.linearVelocity = new Vector3(moveVelocity.x, rb.linearVelocity.y, moveVelocity.z);
 
-            _animator.SetFloat(AnimatorTagsContainer.VELOCITYX, moveInput.x);
-            _animator.SetFloat(AnimatorTagsContainer.VELOCITYY, moveInput.y);
+            _animator.SetFloat(AnimatorTagsContainer.VELOCITYX, moveInput.x,0.1f,Time.fixedDeltaTime);
+            _animator.SetFloat(AnimatorTagsContainer.VELOCITYY, moveInput.y,0.1f,Time.fixedDeltaTime);
         }
 
         private void OnDestroy()
