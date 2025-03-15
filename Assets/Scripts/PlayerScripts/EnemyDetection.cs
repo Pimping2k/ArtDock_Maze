@@ -11,7 +11,6 @@ namespace PlayerScripts
 {
     public class EnemyDetection : MonoBehaviour
     {
-        [SerializeField] private float enemyDestroyTime;
         [SerializeField] private GameObject sword;
         [SerializeField] private GameObject gun;
 
@@ -52,7 +51,7 @@ namespace PlayerScripts
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag(TagsContainer.ENEMY) && enemyInstance != null && enemyInstance == other.gameObject)
+            if (other.CompareTag(TagsContainer.ENEMY))
             {
                 KillEnemyUIController.InvokeOnStateChanged(false);
                 enemyInstance = null;
@@ -65,7 +64,6 @@ namespace PlayerScripts
             if (enemyInstance != null)
             {
                 enemyHealth.Die();
-                Invoke(nameof(DestroyEnemy), enemyDestroyTime);
             }
         }
 
@@ -103,18 +101,6 @@ namespace PlayerScripts
         {
             InputManager.Instance.InputActions.Player.Enable();
             playerInstance.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-        }
-
-        private void DestroyEnemy()
-        {
-            if (enemyInstance != null)
-            {
-                enemyPool.ReturnToPool(enemyInstance.transform.parent.gameObject);
-                enemyInstance = null;
-                enemyHealth = null;
-            }
-
-            KillEnemyUIController.InvokeOnStateChanged(false);
         }
 
         private void OnDestroy()
