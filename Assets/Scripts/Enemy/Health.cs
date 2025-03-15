@@ -11,6 +11,8 @@ namespace Enemy
 
         private Animator _animator;
         private CustomObjectPool enemyPool;
+        private Collider _collider;
+
         public bool IsDead
         {
             get => isDead;
@@ -20,6 +22,7 @@ namespace Enemy
         private void Awake()
         {
             _animator = GetComponent<Animator>();
+            _collider = GetComponent<Collider>();
         }
 
         private void Start()
@@ -30,11 +33,13 @@ namespace Enemy
         private void OnEnable()
         {
             _animator.enabled = true;
+            _collider.enabled = true;
             isDead = false;
         }
 
         public void Die()
         {
+            _collider.enabled = false;
             _animator.enabled = false;
             Invoke(nameof(DestroyEnemy), 5f);
         }

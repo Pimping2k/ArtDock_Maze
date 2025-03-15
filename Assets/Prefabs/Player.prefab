@@ -1789,7 +1789,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c7c2d4df50d45adb57f3e52cab3358d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyDestroyTime: 5
   sword: {fileID: 4094478102453344735}
   gun: {fileID: 5194658142093031490}
 --- !u!135 &6147465321401168468
@@ -1914,6 +1913,7 @@ GameObject:
   - component: {fileID: 2682567957915960801}
   - component: {fileID: 4600676572629620756}
   - component: {fileID: 570138935222718645}
+  - component: {fileID: 981740207230052235}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -1929,13 +1929,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9048314292801456081}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalRotation: {x: 0.53729963, y: 0, z: 0, w: 0.8433915}
+  m_LocalPosition: {x: 0, y: 2, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3968876298022519067}
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 65, y: 0, z: 0}
 --- !u!20 &2682567957915960801
 Camera:
   m_ObjectHideFlags: 0
@@ -2039,6 +2039,20 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &981740207230052235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9048314292801456081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22a8fd48b109bb245b80f6beba2f3ca6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 3968876298022519067}
+  smoothTime: 0.25
 --- !u!1 &9049868912521043684
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,7 +17,6 @@ namespace PlayerScripts
         private GameObject playerInstance;
         private GameObject enemyInstance;
         private Animator _animator;
-        private CustomObjectPool enemyPool;
 
         private Health enemyHealth;
 
@@ -26,7 +25,6 @@ namespace PlayerScripts
             InputManager.Instance.InputActions.Player.Shoot.performed += OnShootPerformed;
             playerInstance = transform.parent.gameObject;
             _animator = GetComponent<Animator>();
-            enemyPool = GameManager.Instance.EnemyPoolInstance.GetComponent<CustomObjectPool>();
         }
 
         private void OnShootPerformed(InputAction.CallbackContext obj)
@@ -59,14 +57,6 @@ namespace PlayerScripts
             }
         }
 
-        private void KillEnemy()
-        {
-            if (enemyInstance != null)
-            {
-                enemyHealth.Die();
-            }
-        }
-
         private void PerformKillAnimation()
         {
             sword.gameObject.SetActive(true);
@@ -91,6 +81,14 @@ namespace PlayerScripts
             enemyHealth.IsDead = true;
         }
 
+        private void KillEnemy()
+        {
+            if (enemyInstance != null)
+            {
+                enemyHealth.Die();
+            }
+        }
+        
         private void GetGun()
         {
             sword.gameObject.SetActive(false);
