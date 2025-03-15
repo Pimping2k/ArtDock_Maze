@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Containers;
 using Enemy;
 using Managers;
@@ -20,7 +21,7 @@ namespace PlayerScripts
         private CustomObjectPool enemyPool;
 
         private Health enemyHealth;
-        
+
         private void Start()
         {
             InputManager.Instance.InputActions.Player.Shoot.performed += OnShootPerformed;
@@ -41,7 +42,7 @@ namespace PlayerScripts
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag(TagsContainer.ENEMY))
+            if (other.CompareTag(TagsContainer.ENEMY) && enemyInstance == null)
             {
                 enemyInstance = other.gameObject;
                 enemyHealth = enemyInstance.GetComponent<Health>();
@@ -51,7 +52,7 @@ namespace PlayerScripts
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag(TagsContainer.ENEMY))
+            if (other.CompareTag(TagsContainer.ENEMY) && enemyInstance == other.gameObject)
             {
                 KillEnemyUIController.InvokeOnStateChanged(false);
             }
@@ -72,22 +73,21 @@ namespace PlayerScripts
             gun.gameObject.SetActive(false);
 
             StartCoroutine(MoveToEnemy(enemyInstance.transform.position));
-            InputManager.Instance.InputActions.Player.Disable();
         }
 
-        private IEnumerator MoveToEnemy(Vector3 targetPos)
+        private IEnumerator MoveToEnemy(Vector3 target)
         {
-            while (Vector3.Distance(playerInstance.transform.position, targetPos) > 0.4f)
+            while (Vector3.Distance(playerInstance.transform.position, target) > 0.4f)
             {
-                playerInstance.transform.LookAt(targetPos);
-                playerInstance.transform.position = Vector3.MoveTowards(playerInstance.transform.position,targetPos,.1f);
-                
+                playerInstance.transform.position = Vector3.MoveTowards(playerInstance.transform.position, target, .1f);
+                Vector3 direction = enemyInstance.transform.position - playerInstance.transform.position;
+                playerInstance.transform.forward = direction;
+                playerInstance.transform.rotation = Quaternion.LookRotation(direction);
                 yield return null;
             }
 
             _animator.SetTrigger(AnimatorTagsContainer.FINISHING);
             enemyHealth.IsDead = true;
-            playerInstance.transform.rotation = Quaternion.Euler(0f,0f,0f);
         }
 
         private void GetGun()
@@ -99,6 +99,7 @@ namespace PlayerScripts
         private void TurnInput()
         {
             InputManager.Instance.InputActions.Player.Enable();
+            playerInstance.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
         }
 
         private void DestroyEnemy()
