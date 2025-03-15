@@ -52,9 +52,10 @@ namespace PlayerScripts
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag(TagsContainer.ENEMY) && enemyInstance == other.gameObject)
+            if (other.CompareTag(TagsContainer.ENEMY)&& enemyInstance == other.gameObject)
             {
                 KillEnemyUIController.InvokeOnStateChanged(false);
+                enemyInstance = null;
             }
         }
 
