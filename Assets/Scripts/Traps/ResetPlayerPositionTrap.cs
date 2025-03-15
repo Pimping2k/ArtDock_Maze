@@ -1,10 +1,11 @@
-﻿using Containers;
+﻿using System;
+using Containers;
 using Interfaces;
 using UnityEngine;
 
 namespace Traps
 {
-    public class ResetMazeTrap : MonoBehaviour, ITrappable
+    public class ResetPlayerPositionTrap : MonoBehaviour, ITrappable
     {
         private void OnTriggerEnter(Collider other)
         {
@@ -16,7 +17,6 @@ namespace Traps
 
         public void Activate()
         {
-            MazeGenerator.InvokeRegenerateMaze(false);
             GameManager.Instance.InvokeRespawnPlayer();
         }
     }

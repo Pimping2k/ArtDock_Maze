@@ -494,9 +494,55 @@ MonoBehaviour:
   exitPrefab: {fileID: 4048149189364750510, guid: 57ec672be51ad0549b42c25a737eff5d, type: 3}
   resetPosTrap: {fileID: 4048149189364750510, guid: f27fdb47325de2a4bb092afbe96339fc, type: 3}
   regenerateMazeTrap: {fileID: 4048149189364750510, guid: d48c1254c0591e745b0bc027614d9657, type: 3}
-  width: 3
-  height: 5
-  trapCount: 0
+  width: 11
+  height: 13
+  trapCount: 3
+--- !u!1 &1688410688
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1688410689}
+  - component: {fileID: 1688410690}
+  m_Layer: 0
+  m_Name: EnemyPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1688410689
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1688410688}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 16.560993, y: 5.7774644, z: 12.691088}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1688410690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1688410688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6e30e9b9cd037943b8116d422fa6bf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolPrefab: {fileID: 6695923167237944560, guid: b0cc3da7115085246b4a59f865b49915, type: 3}
+  initialSize: 10
 --- !u!1 &2140226640
 GameObject:
   m_ObjectHideFlags: 0
@@ -1796,3 +1842,4 @@ SceneRoots:
   - {fileID: 335466187450789947}
   - {fileID: 337338622}
   - {fileID: 246830149}
+  - {fileID: 1688410689}

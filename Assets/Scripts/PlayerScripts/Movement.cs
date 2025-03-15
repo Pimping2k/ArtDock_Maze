@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace PlayerScripts
 {
@@ -7,10 +6,9 @@ namespace PlayerScripts
     {
         [SerializeField] private Animator _animator;
         
-        [SerializeField] private float walkSpeed = 6f;
-        [SerializeField] private float runSpeed = 12f;
-        [SerializeField] private float jumpPower = 5f;
-        [SerializeField] private float gravity = 10f;
+        [SerializeField,Range(1,100)] private float walkSpeed;
+        [SerializeField,Range(1,100)] private float runSpeed;
+        [SerializeField,Range(1,20)] private float jumpPower;
         [SerializeField] private float groundCheckDistance = 0.2f;
 
         [SerializeField] private bool canMove = true;
@@ -36,10 +34,14 @@ namespace PlayerScripts
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
+            var startWalkSpeed = walkSpeed;
+            
             _inputSystemActions.Player.Enable();
             _inputSystemActions.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
             _inputSystemActions.Player.Move.canceled += ctx => moveInput = Vector2.zero;
             _inputSystemActions.Player.Jump.performed += ctx => jumpPressed = true;
+            _inputSystemActions.Player.Sprint.performed += ctx => walkSpeed = runSpeed;
+            _inputSystemActions.Player.Sprint.canceled += ctx => walkSpeed = startWalkSpeed;
         }
 
         private void FixedUpdate()
@@ -74,7 +76,7 @@ namespace PlayerScripts
                 rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpPower, rb.linearVelocity.z);
             }
 
-            jumpPressed = false; // Сбрасываем флаг после прыжка
+            jumpPressed = false;
         }
     }
 }

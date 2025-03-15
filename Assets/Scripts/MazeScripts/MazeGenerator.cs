@@ -9,21 +9,20 @@ public class MazeGenerator : MonoBehaviour
 {
     [Header("References")] [SerializeField]
     private GameObject mazeContainer;
+
     [SerializeField] private GameObject cellPrefab;
     [SerializeField] private GameObject exitPrefab;
     [SerializeField] private GameObject resetPosTrap;
     [SerializeField] private GameObject regenerateMazeTrap;
-    
-    
-    [Header("Properties")] public int width;
-    public int height;
-    [SerializeField, Range(0, 10)] private int trapCount = 3;
-    
-    private readonly Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
-    private CellController[,] grid;
 
+
+    [Header("Settings")] 
+    [SerializeField, Range(1, 100)] private int width;
+    [SerializeField, Range(1, 100)] private int height;
+    [SerializeField, Range(0, 10)] private int trapCount = 3;
+
+    private CellController[,] grid;
     private CellController exitCell;
-    
     private static event Action<bool> RegenerateMaze;
     public static void InvokeRegenerateMaze(bool newMaze) => RegenerateMaze?.Invoke(newMaze);
 
@@ -53,7 +52,7 @@ public class MazeGenerator : MonoBehaviour
             width = Random.Range(width + 2, width + 7);
             height = Random.Range(width + 2, width + 7);
         }
-        
+
         grid = new CellController[width, height];
 
         InstantiateMaze();
@@ -66,7 +65,8 @@ public class MazeGenerator : MonoBehaviour
     private void UpdatePlayerSpawnPoint()
     {
         var startPos = grid[0, 0].transform.localPosition;
-        GameManager.Instance.SpawnPoint.SetPositionAndRotation(new Vector3(startPos.x, 1, startPos.z),quaternion.identity);
+        GameManager.Instance.SpawnPoint.SetPositionAndRotation(new Vector3(startPos.x, 1, startPos.z),
+            quaternion.identity);
     }
 
     private void ClearMaze()
@@ -182,14 +182,14 @@ public class MazeGenerator : MonoBehaviour
     {
         for (int i = 0; i < trapCount; i++)
         {
-            int x = Random.Range(0, width);
+            int x = Random.Range(4, width);
             int y = Random.Range(0, height);
             var cell = grid[x, y];
             var trapPrefab = Random.value > 0.5f ? resetPosTrap : regenerateMazeTrap;
             Instantiate(trapPrefab, cell.transform.position, Quaternion.identity, mazeContainer.transform);
         }
     }
-    
+
     private void OnDestroy()
     {
         RegenerateMaze -= GenerateMaze;

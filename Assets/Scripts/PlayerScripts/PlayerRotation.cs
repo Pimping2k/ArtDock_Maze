@@ -1,15 +1,20 @@
-﻿using System;
-using Unity.Collections;
-using UnityEngine;
-using UnityEngine.Serialization;
+﻿using UnityEngine;
 
 namespace PlayerScripts
 {
     public class PlayerRotation : MonoBehaviour
     {
-        [Header("References")] [SerializeField]
-        private Camera playerCamera;
+        [Header("Settings")] [SerializeField] [Tooltip("Handle rotation speed")]
+        private float rotationSpeed = 10f;
 
+        [SerializeField] [Tooltip("Value of rotation upper body of player in pan")]
+        private float rotationXAngle;
+        
+        [SerializeField] [Tooltip("Value of rotation upper body of player in tilt")]
+        private float rotationZAngle;
+        
+        [Header("References")] 
+        [SerializeField] private Camera playerCamera;
         [SerializeField] private Transform lowerBodyParent;
         [SerializeField] private Transform lowerBody;
         [SerializeField] private Transform upperBodyParent;
@@ -17,20 +22,12 @@ namespace PlayerScripts
         [SerializeField] private Transform weaponParent;
         [SerializeField] private Transform lScapula;
         [SerializeField] private Transform rScapula;
-
-        [Header("Settings")] [SerializeField] [Tooltip("Handle rotation speed")]
-        private float rotationSpeed = 10f;
-
-        [SerializeField] [Tooltip("Minimum value of rotation upper body of player")]
-        private float minAngle;
-
-        [SerializeField] [Tooltip("Maximum value of rotation upper body of player")]
-        private float maxAngle;
-
+        
         private Vector2 moveInput;
         private InputSystem_Actions _inputSystemActions;
         private Vector2 lookInput;
         private float currentXRotation;
+        private float currentZRotation;
 
         private void Awake()
         {
@@ -55,6 +52,7 @@ namespace PlayerScripts
         {
             HandleLowerBodyRotation();
             HandleUpperBodyRotation();
+            HandleWeaponRotation();
         }
 
         private void HandleLowerBodyRotation()
@@ -75,12 +73,19 @@ namespace PlayerScripts
             Vector2 mouseDelta = lookInput;
             mouseDelta *= rotationSpeed * Time.deltaTime;
             currentXRotation -= mouseDelta.x;
+            currentZRotation -= mouseDelta.y;
+            
+            currentXRotation = Mathf.Clamp(currentXRotation, -rotationXAngle, rotationXAngle);
+            currentZRotation = Mathf.Clamp(currentZRotation, -rotationZAngle, rotationZAngle);
+            
+            upperBodyParent.transform.localRotation = Quaternion.Euler(currentXRotation, 0f, currentZRotation);
+        }
 
-            currentXRotation = Mathf.Clamp(currentXRotation, minAngle, maxAngle);
-            upperBodyParent.transform.localRotation = Quaternion.Euler(currentXRotation, 0f, 0f);
-
-            Quaternion targetRotation = Quaternion.Euler(currentXRotation,0f, 0f );
-            weaponParent.localRotation = Quaternion.Slerp(weaponParent.localRotation, targetRotation, Time.deltaTime * rotationSpeed);
+        private void HandleWeaponRotation()
+        {
+            Quaternion targetRotation = Quaternion.Euler(currentXRotation, 0f, 0f);
+            weaponParent.localRotation = Quaternion.Slerp(weaponParent.localRotation, targetRotation,
+                Time.deltaTime * rotationSpeed);
         }
     }
 }
