@@ -80,7 +80,6 @@ namespace PlayerScripts
             {
                 Vector3 direction = targetPos - playerInstance.transform.position;
                 direction.y = 0;
-                playerInstance.transform.rotation = Quaternion.Euler(0f,0f,0f);
                 
                 float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
                 Quaternion targetRotation = Quaternion.Euler(0f, targetAngle, 0f);
