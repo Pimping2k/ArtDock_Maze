@@ -72,20 +72,14 @@ namespace PlayerScripts
             gun.gameObject.SetActive(false);
 
             StartCoroutine(MoveToEnemy(enemyInstance.transform.position));
+            InputManager.Instance.InputActions.Player.Disable();
         }
 
         private IEnumerator MoveToEnemy(Vector3 targetPos)
         {
             while (Vector3.Distance(playerInstance.transform.position, targetPos) > 0.4f)
             {
-                Vector3 direction = targetPos - playerInstance.transform.position;
-                direction.y = 0;
-                
-                float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-                Quaternion targetRotation = Quaternion.Euler(0f, targetAngle, 0f);
-                
-                playerInstance.transform.rotation = Quaternion.Slerp(playerInstance.transform.rotation, targetRotation, Time.deltaTime * 20f);
-                
+                playerInstance.transform.LookAt(targetPos);
                 playerInstance.transform.position = Vector3.MoveTowards(playerInstance.transform.position,targetPos,.1f);
                 
                 yield return null;
@@ -102,11 +96,16 @@ namespace PlayerScripts
             gun.gameObject.SetActive(true);
         }
 
+        private void TurnInput()
+        {
+            InputManager.Instance.InputActions.Player.Enable();
+        }
+
         private void DestroyEnemy()
         {
             if (enemyInstance != null)
             {
-                enemyPool.ReturnToPool(enemyInstance);
+                enemyPool.ReturnToPool(enemyInstance.transform.parent.gameObject);
                 enemyInstance = null;
                 enemyHealth = null;
             }

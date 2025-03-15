@@ -14,5 +14,6 @@ public class FinishGameManager : MonoBehaviour
     private void HandleFinish()
     {
         MazeGenerator.InvokeRegenerateMaze(true);
+        GameManager.Instance.InvokeRespawnPlayer();
     }
 }

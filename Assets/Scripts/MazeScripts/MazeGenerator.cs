@@ -234,6 +234,7 @@ public class MazeGenerator : MonoBehaviour
 
             enemy = enemyPool.GetFromPool();
             enemy.transform.position = spawnPos;
+            enemy.SetActive(true);
             usedPositions.Add(spawnPos);
         }
     }
