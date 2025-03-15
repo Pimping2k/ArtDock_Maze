@@ -61797,7 +61797,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.5833334
+  - time: 1.6666666
     functionName: TurnInput
     data: 
     objectReferenceParameter: {fileID: 0}

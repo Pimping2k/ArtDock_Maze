@@ -52,10 +52,11 @@ namespace PlayerScripts
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag(TagsContainer.ENEMY)&& enemyInstance == other.gameObject)
+            if (other.CompareTag(TagsContainer.ENEMY) && enemyInstance != null && enemyInstance == other.gameObject)
             {
                 KillEnemyUIController.InvokeOnStateChanged(false);
                 enemyInstance = null;
+                enemyHealth = null;
             }
         }
 
@@ -74,6 +75,7 @@ namespace PlayerScripts
             gun.gameObject.SetActive(false);
 
             StartCoroutine(MoveToEnemy(enemyInstance.transform.position));
+            InputManager.Instance.InputActions.Player.Disable();
         }
 
         private IEnumerator MoveToEnemy(Vector3 target)
@@ -113,6 +115,11 @@ namespace PlayerScripts
             }
 
             KillEnemyUIController.InvokeOnStateChanged(false);
+        }
+
+        private void OnDestroy()
+        {
+            InputManager.Instance.InputActions.Player.Shoot.performed -= OnShootPerformed;
         }
     }
 }
