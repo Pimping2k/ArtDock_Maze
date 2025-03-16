@@ -49,11 +49,11 @@ namespace PlayerScripts
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag(TagsContainer.ENEMY))
+            if (other.gameObject.CompareTag(TagsContainer.ENEMY))
             {
-                KillEnemyUIController.InvokeOnStateChanged(false);
                 enemyInstance = null;
                 enemyHealth = null;
+                KillEnemyUIController.InvokeOnStateChanged(false);
             }
         }
 
@@ -86,6 +86,9 @@ namespace PlayerScripts
             if (enemyInstance != null)
             {
                 enemyHealth.Die();
+                enemyInstance = null;
+                enemyHealth = null;
+                KillEnemyUIController.InvokeOnStateChanged(false);
             }
         }
         
@@ -99,6 +102,7 @@ namespace PlayerScripts
         {
             InputManager.Instance.InputActions.Player.Enable();
             playerInstance.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            KillEnemyUIController.InvokeOnStateChanged(false);
         }
 
         private void OnDestroy()

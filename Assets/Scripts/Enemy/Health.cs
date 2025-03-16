@@ -1,6 +1,4 @@
-﻿using System;
-using Interfaces;
-using UI;
+﻿using Interfaces;
 using UnityEngine;
 
 namespace Enemy
@@ -32,8 +30,8 @@ namespace Enemy
 
         private void OnEnable()
         {
-            _animator.enabled = true;
             _collider.enabled = true;
+            _animator.enabled = true;
             isDead = false;
         }
 
@@ -47,8 +45,6 @@ namespace Enemy
         private void DestroyEnemy()
         {
             enemyPool.ReturnToPool(gameObject.transform.parent.gameObject);
-
-            KillEnemyUIController.InvokeOnStateChanged(false);
         }
     }
 }
