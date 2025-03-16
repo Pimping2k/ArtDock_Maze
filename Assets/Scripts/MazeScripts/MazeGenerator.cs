@@ -15,10 +15,9 @@ public class MazeGenerator : MonoBehaviour
     [SerializeField] private GameObject resetPosTrap;
     [SerializeField] private GameObject regenerateMazeTrap;
 
-    [Header("Settings")] [SerializeField, Range(1, 100)]
-    private int width;
-
-    [SerializeField, Range(1, 100)] private int height;
+    [Header("Settings")] 
+    [SerializeField, Range(6, 100)] [Tooltip("Width of maze should be more than amount of enemies")] private int width;
+    [SerializeField, Range(6, 100)] [Tooltip("Height of maze should be more than amount of enemies")] private int height;
     [SerializeField, Range(0, 10)] private int trapCount;
     [SerializeField, Range(0, 10)] private int enemyCount;
 
@@ -189,7 +188,7 @@ public class MazeGenerator : MonoBehaviour
         HashSet<Vector2Int> occupiedCells = new HashSet<Vector2Int>();
         int totalRegenerateTraps = 0;
         int totalRespawnTraps = 0;
-
+        
         for (int i = 0; i < trapCount; i++)
         {
             Vector2Int pos;
@@ -219,15 +218,17 @@ public class MazeGenerator : MonoBehaviour
     private void SpawnEnemies()
     {
         HashSet<Vector3> usedPositions = new HashSet<Vector3>();
-
-        for (int i = 0; i < enemyCount; i++)
+        int maxPossibleEnemies = (width - 2) * (height - 2);
+        int enemiesToSpawn = Mathf.Min(enemyCount, maxPossibleEnemies);
+        
+        for (int i = 0; i < enemiesToSpawn; i++)
         {
             GameObject enemy;
             Vector3 spawnPos;
             do
             {
-                int x = Random.Range(3, width - 1);
-                int y = Random.Range(3, height - 1);
+                int x = Random.Range(2, width - 1);
+                int y = Random.Range(2, height - 1);
                 var cell = grid[x, y];
                 spawnPos = new Vector3(cell.transform.position.x, 1f, cell.transform.position.z);
             } while (usedPositions.Contains(spawnPos));
