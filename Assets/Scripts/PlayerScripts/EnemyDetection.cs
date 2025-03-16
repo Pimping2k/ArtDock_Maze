@@ -68,7 +68,7 @@ namespace PlayerScripts
 
         private IEnumerator MoveToEnemy(Vector3 target)
         {
-            while (Vector3.Distance(playerInstance.transform.position, target) > 0.4f)
+            while (Vector3.Distance(playerInstance.transform.position, target) > 0.2f)
             {
                 playerInstance.transform.position = Vector3.MoveTowards(playerInstance.transform.position, target, .1f);
                 Vector3 direction = enemyInstance.transform.position - playerInstance.transform.position;

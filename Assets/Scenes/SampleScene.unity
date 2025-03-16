@@ -546,7 +546,7 @@ MonoBehaviour:
   regenerateMazeTrap: {fileID: 4048149189364750510, guid: d48c1254c0591e745b0bc027614d9657, type: 3}
   width: 7
   height: 11
-  trapCount: 3
+  trapCount: 4
   enemyCount: 3
 --- !u!1 &1784562879
 GameObject:

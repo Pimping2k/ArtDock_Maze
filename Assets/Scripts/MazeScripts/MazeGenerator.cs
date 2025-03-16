@@ -226,8 +226,8 @@ public class MazeGenerator : MonoBehaviour
             Vector3 spawnPos;
             do
             {
-                int x = Random.Range(1, width - 1);
-                int y = Random.Range(1, height - 1);
+                int x = Random.Range(3, width - 1);
+                int y = Random.Range(3, height - 1);
                 var cell = grid[x, y];
                 spawnPos = new Vector3(cell.transform.position.x, 1f, cell.transform.position.z);
             } while (usedPositions.Contains(spawnPos));
