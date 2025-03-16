@@ -2,10 +2,10 @@
 {
     public static class TagsContainer
     {
-        public static string PLAYER = "Player";
-        public static string ENEMY = "Enemy";
+        public const string PLAYER = "Player";
+        public const string ENEMY = "Enemy";
         
-        public static string GAMESCENE = "SampleScene";
-        public static string MAINMENU = "MainMenu";
+        public const string GAMESCENE = "SampleScene";
+        public const string MAINMENU = "MainMenu";
     }
 }

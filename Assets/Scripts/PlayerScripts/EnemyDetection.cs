@@ -18,7 +18,7 @@ namespace PlayerScripts
         private GameObject enemyInstance;
         private Animator _animator;
 
-        private Health enemyHealth;
+        private EnemyHealth _enemyEnemyHealth;
 
         private void Start()
         {
@@ -29,7 +29,7 @@ namespace PlayerScripts
 
         private void OnShootPerformed(InputAction.CallbackContext obj)
         {
-            if (enemyInstance != null && !enemyHealth.IsDead)
+            if (enemyInstance != null && !_enemyEnemyHealth.IsDead)
             {
                 PerformKillAnimation();
             }
@@ -42,7 +42,7 @@ namespace PlayerScripts
             if (other.CompareTag(TagsContainer.ENEMY) && enemyInstance == null)
             {
                 enemyInstance = other.gameObject;
-                enemyHealth = enemyInstance.GetComponent<Health>();
+                _enemyEnemyHealth = enemyInstance.GetComponent<EnemyHealth>();
                 KillEnemyUIController.InvokeOnStateChanged(true);
             }
         }
@@ -52,7 +52,7 @@ namespace PlayerScripts
             if (other.gameObject.CompareTag(TagsContainer.ENEMY))
             {
                 enemyInstance = null;
-                enemyHealth = null;
+                _enemyEnemyHealth = null;
                 KillEnemyUIController.InvokeOnStateChanged(false);
             }
         }
@@ -78,16 +78,16 @@ namespace PlayerScripts
             }
 
             _animator.SetTrigger(AnimatorTagsContainer.FINISHING);
-            enemyHealth.IsDead = true;
+            _enemyEnemyHealth.IsDead = true;
         }
 
         private void KillEnemy()
         {
             if (enemyInstance != null)
             {
-                enemyHealth.Die();
+                _enemyEnemyHealth.Die();
                 enemyInstance = null;
-                enemyHealth = null;
+                _enemyEnemyHealth = null;
                 KillEnemyUIController.InvokeOnStateChanged(false);
             }
         }

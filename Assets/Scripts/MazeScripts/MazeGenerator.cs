@@ -42,7 +42,7 @@ public class MazeGenerator : MonoBehaviour
 
     private void HandlePlayerSpawn()
     {
-        GameManager.Instance.InvokeSpawnPlayer();
+        GameManager.Instance.SpawnPlayer();
         UpdatePlayerSpawnPoint();
     }
 

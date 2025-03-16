@@ -17,7 +17,7 @@ namespace Traps
 
         public void Activate()
         {
-            GameManager.Instance.InvokeRespawnPlayer();
+            GameManager.Instance.RespawnPlayer();
         }
     }
 }

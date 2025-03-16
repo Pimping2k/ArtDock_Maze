@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Enemy
 {
-    public class Health : MonoBehaviour, IDeadable
+    public class EnemyHealth : MonoBehaviour, IDeadable
     {
         [SerializeField] private bool isDead;
 
@@ -19,7 +19,7 @@ namespace Enemy
 
         private void Awake()
         {
-            _animator = GetComponent<Animator>();
+            _animator = GetComponentInChildren<Animator>();
             _collider = GetComponent<Collider>();
         }
 
@@ -30,21 +30,25 @@ namespace Enemy
 
         private void OnEnable()
         {
-            _collider.enabled = true;
-            _animator.enabled = true;
+            HandleComponentsState(true);
             isDead = false;
         }
 
         public void Die()
         {
-            _collider.enabled = false;
-            _animator.enabled = false;
+            HandleComponentsState(false);
             Invoke(nameof(DestroyEnemy), 5f);
+        }
+
+        private void HandleComponentsState(bool state)
+        {
+            _collider.enabled = state;
+            _animator.enabled = state;
         }
 
         private void DestroyEnemy()
         {
-            enemyPool.ReturnToPool(gameObject.transform.parent.gameObject);
+            enemyPool.ReturnToPool(gameObject);
         }
     }
 }

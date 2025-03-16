@@ -9,7 +9,7 @@ namespace MazeScripts
         {
             if (other.CompareTag(TagsContainer.PLAYER))
             {
-                FinishGameManager.InvokeFinishGame();
+                GameManager.Instance.FinishGame();
             }
         }
     }

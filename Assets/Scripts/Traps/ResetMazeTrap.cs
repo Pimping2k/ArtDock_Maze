@@ -17,7 +17,7 @@ namespace Traps
         public void Activate()
         {
             MazeGenerator.InvokeRegenerateMaze(false);
-            GameManager.Instance.InvokeRespawnPlayer();
+            GameManager.Instance.RespawnPlayer();
         }
     }
 }

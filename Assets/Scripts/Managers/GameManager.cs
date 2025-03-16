@@ -9,18 +9,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private Transform spawnPoint;
 
-    private event Action SpawnPlayer;
-    private event Action RespawnPlayer;
-    public void InvokeSpawnPlayer() => SpawnPlayer?.Invoke();
-    public void InvokeRespawnPlayer() => RespawnPlayer?.Invoke();
-
     private GameObject playerInstance;
 
-    public GameObject PlayerInstance
-    {
-        get => playerInstance;
-        set => playerInstance = value;
-    }
+    public GameObject PlayerInstance => playerInstance;
 
     private GameObject enemyPoolInstance;
 
@@ -51,8 +42,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        SpawnPlayer += OnPlayerSpawn;
-        RespawnPlayer += OnPlayerRespawn;
         InitializeEnemyPool();
     }
 
@@ -61,20 +50,19 @@ public class GameManager : MonoBehaviour
         enemyPoolInstance = Instantiate(enemyPool);
     }
 
-    private void OnPlayerSpawn()
+    public void SpawnPlayer()
     {
         playerInstance = Instantiate(playerPrefab, spawnPoint.position, Quaternion.identity);
-        Debug.Log(playerInstance, this);
     }
-
-    private void OnDestroy()
-    {
-        SpawnPlayer -= OnPlayerSpawn;
-        RespawnPlayer -= OnPlayerRespawn;
-    }
-
-    private void OnPlayerRespawn()
+    
+    public void RespawnPlayer()
     {
         playerInstance.transform.position = spawnPoint.position;
+    }
+
+    public void FinishGame()
+    {
+        MazeGenerator.InvokeRegenerateMaze(true);
+        
     }
 }

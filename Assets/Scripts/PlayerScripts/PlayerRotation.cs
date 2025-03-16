@@ -75,7 +75,7 @@ namespace PlayerScripts
             Vector2 mouseDelta = lookInput;
             mouseDelta *= rotationSpeed * Time.deltaTime;
             currentXRotation -= mouseDelta.x;
-            currentZRotation -= mouseDelta.y;
+            currentZRotation += mouseDelta.y;
 
             currentXRotation = Mathf.Clamp(currentXRotation, -rotationXAngle, rotationXAngle);
             currentZRotation = Mathf.Clamp(currentZRotation, -rotationZAngle, rotationZAngle);

@@ -2,8 +2,8 @@
 {
     public static class AnimatorTagsContainer
     {
-        public static string VELOCITYX = "VelocityX";
-        public static string VELOCITYY = "VelocityY";
-        public static string FINISHING = "Finishing";
+        public const string VELOCITYX = "VelocityX";
+        public const string VELOCITYY = "VelocityY";
+        public const string FINISHING = "Finishing";
     }
 }
